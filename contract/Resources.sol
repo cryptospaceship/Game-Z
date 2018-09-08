@@ -25,7 +25,7 @@ contract Contract {
         require(level <= 10);
         (energy,graphene,metal,end) = GameLib.getUpgradeResourceCost(_type,level,0);
 
-        (energy,graphene,metal) = collectResourcesAndSub(_id,energy,graphene,metal);
+        (energy,graphene,metal) = collectResourcesAndSub(r,energy,graphene,metal);
         
         r.endUpgrade = uint32(end);
         r.lastHarvest = uint32(block.number);
@@ -105,17 +105,16 @@ contract Contract {
         }
     }
     
-    function collectResourcesAndSub(uint _id, uint e, uint g, uint m)
+    function collectResourcesAndSub(ResourcesLibrary.Resources memory r, uint e, uint g, uint m)
         internal
         view
         returns(uint, uint, uint)
     {
-        ResourcesLibrary.Resources memory r = resources[_id];
         uint energy;
         uint graphene;
         uint metal;
         
-        (energy, graphene, metal) = getResources(_id);
+        (energy, graphene, metal) = getResources(r);
         require(
             r.lastHarvest <= block.number && 
             energy >= e && graphene >= g && metal >= m    
@@ -126,13 +125,12 @@ contract Contract {
 
     
     
-    function getResources(uint _id)
+    function getResources(ResourcesLibrary.Resources memory r)
         internal
         view
         returns(uint energy, uint graphene, uint metal)    
     {
-        ResourcesLibrary.Resources memory r = resources[_id];
-        (energy,graphene,metal) = getUnharvestResources(_id);
+        (energy,graphene,metal) = getUnharvestResources(r);
         uint maxLoad = 10000;
         
         energy = energy + r.eStock;
@@ -148,12 +146,12 @@ contract Contract {
             metal = maxLoad;
     }
     
-    function getUnharvestResources(uint _id)
+    function getUnharvestResources(ResourcesLibrary.Resources memory r)
         internal
         view
         returns(uint energy, uint graphene, uint metal)
     {
-        ResourcesLibrary.Resources memory r = resources[_id];
+
         (energy,graphene,metal) = GameLib.getUnharvestResources(
             r.getLevel(), 
             uint(r.endUpgrade), 
