@@ -10,6 +10,7 @@ contract Contract {
         resources[0].eStock = 10000;
         resources[0].gStock = 10000;
         resources[0].mStock = 10000;
+        resources[0].lastHarvest = uint32(block.number);
     }
     
     function upgradeResourceInternal(uint _id, uint _type, uint _index)
@@ -78,6 +79,14 @@ contract Contract {
             return m;
     }
 
+    function viewProduction(uint _id)
+        external
+        view
+        returns(uint[6] memory e, uint g, uint m)
+    {
+        ResourcesLibrary.Resources memory r = resources[_id];
+        return getResourceLevel(r.getLevel(),r.endUpgrade);
+    }
     
     function getResourceLevel (uint[9] memory level, uint endUpgrade) 
         internal 
@@ -123,7 +132,14 @@ contract Contract {
         return (energy-e, graphene-g, metal-m);
     }
 
-    
+    function stock(uint _id)
+        external
+        view
+        returns(uint energy, uint graphene, uint metal)
+    {
+        ResourcesLibrary.Resources memory r = resources[_id];
+        return getResources(r);
+    }
     
     function getResources(ResourcesLibrary.Resources memory r)
         internal

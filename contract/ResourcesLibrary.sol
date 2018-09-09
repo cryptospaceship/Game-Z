@@ -30,7 +30,7 @@ library ResourcesLibrary {
     }
     
     function toUint24(uint[3] a)
-        external
+        internal
         pure
         returns(uint24 r)
     {
@@ -40,19 +40,19 @@ library ResourcesLibrary {
     }
     
     function toUint72(uint[9] a)
-        external
+        internal
         pure
         returns(uint72 r)
     {
-        r = uint24(set8(r,0,a[0]));
-        r = uint24(set8(r,8,a[1]));
-        r = uint24(set8(r,16,a[2]));
-        r = uint24(set8(r,24,a[3]));
-        r = uint24(set8(r,32,a[4]));
-        r = uint24(set8(r,40,a[5]));
-        r = uint24(set8(r,48,a[6]));
-        r = uint24(set8(r,56,a[7]));
-        r = uint24(set8(r,64,a[8]));
+        r = uint72(set8(r,0,a[0]));
+        r = uint72(set8(r,8,a[1]));
+        r = uint72(set8(r,16,a[2]));
+        r = uint72(set8(r,24,a[3]));
+        r = uint72(set8(r,32,a[4]));
+        r = uint72(set8(r,40,a[5]));
+        r = uint72(set8(r,48,a[6]));
+        r = uint72(set8(r,56,a[7]));
+        r = uint72(set8(r,64,a[8]));
     }
     
     function set8(uint store, uint bitfrom, uint value)
